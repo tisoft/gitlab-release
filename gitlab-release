@@ -37,7 +37,7 @@ class GitlabRelease:
 
     def fetch_all_env(self):
         env = {
-            'CI_PROJECT_URL': '',
+            'CI_API_V4_URL': '',
             'CI_PROJECT_ID': '',
             'GITLAB_ACCESS_TOKEN': "You must specifiy the private token linked to your GitLab account.\n"
                                    'You probably need to add a GITLAB_ACCESS_TOKEN variable to your project.',
@@ -46,11 +46,8 @@ class GitlabRelease:
             self.fetch_env_var(var, msg)
 
     def get_api_project_url(self):
-        api_version = 'v3'
-        if self.is_gitlab_v9():
-            api_version = 'v4'
-        return urljoin(self.env['CI_PROJECT_URL'],
-                       '/api/{}/projects/{}'.format(api_version, self.env['CI_PROJECT_ID']))
+        return urljoin(self.env['CI_API_V4_URL'],
+                       'v4/projects/{}'.format(self.env['CI_PROJECT_ID']))
 
     def post_file(self, filename):
         url = '/'.join((self.api_project_url, 'uploads'))
